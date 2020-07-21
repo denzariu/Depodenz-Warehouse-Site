@@ -1,6 +1,7 @@
 // import db from "./db.json"
 const express = require('express');
 var db = require("./db.json")
+const path = require("path")
 const app = express();
 app.use(express.json());
 
@@ -32,22 +33,39 @@ app.get('/search', (req, res) => {
 app.get('/:id/movies', (req, res) => {
     console.log('aici afisare filme user', req.query);
 
-    let name = req.query.value;
     let id = req.params.id;
+    let movieArray = db.users[id].public.liked_movies;
 
-    let listaCodFilme = db.users[id].public.liked_movies;
-
-    if( listaCodFilme.length !== 0 )
+    if( movieArray.length !== 0 )
     {
-        let listaFilme = listaCodFilme.map(idFilm => {return db.movies.find(movie => movie.id === idFilm)}).filter(movie => movie != null)
-        listaFilme = listaFilme.map(movie => movie.name)
-        res.send("This user likes movies such as:\n" + listaFilme);
+        let likedMovies = movieArray.map(idMovie => {return db.movies.find(movie => movie.id === idMovie)}).filter(movie => movie != null)
+        likedMovies = likedMovies.map(movie => movie.name)
+        res.send("This user likes movies such as:\n" + likedMovies.map(movie => " " + movie));
     }
     else
         res.status(200).send({error: "Userul nu a adaugat niciun film."})
-
 })
 
+app.get('/hello/:id', (req, res) => {
+
+    res.sendFile(path.join(__dirname + '/helloworld.html'));
+
+})
+app.get('/:id/series', (req, res) => {
+    console.log('aici afisare filme user', req.query);
+
+    let id = req.params.id;
+    let seriesArray = db.users[id].public.liked_series;
+
+    if( seriesArray.length !== 0 )
+    {
+        let likedSeries = seriesArray.map(idSeries => {return db.series.find(series => series.id === idSeries)}).filter(series => series != null)
+        likedSeries = likedSeries.map(movie => movie.name)
+        res.send("This user likes series such as:\n" + likedSeries);
+    }
+    else
+        res.status(200).send({error: "Userul nu a adaugat niciun film."})
+})
 app.put('/update/:id', (req, res) => {
     console.log('aici update', req.body);
     let id = req.params.id;
@@ -56,7 +74,7 @@ app.put('/update/:id', (req, res) => {
     db.users[id].public = newProfile;
     console.log(db.users[id]);
     //db.users[id].public.name = name;
-    res.send(db.users[id]);
+    res.json(db.users[id]);
 
 })
 
