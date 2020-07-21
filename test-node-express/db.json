@@ -1,0 +1,146 @@
+{
+  "users":
+  [
+    {
+      "id": 0,
+      "private":
+      {
+        "token": "",
+        "email": "",
+        "password": ""
+
+      },
+
+      "public":
+      {
+        "name": "",
+        "profile_pic": "",
+        "profile_desc": "",
+        "liked_movies": [],
+        "liked_series": [],
+        "following": []
+      }
+
+    },
+
+    {
+      "id": 1,
+      "private":
+      {
+        "token": "ADGH431GGD",
+        "email": "dummy@gmail.com",
+        "password": "dumdum123"
+
+      },
+
+      "public":
+      {
+        "name": "Dummy Test",
+        "profile_pic": "https://mymodernmet.com/wp/wp-content/uploads/2018/10/Mou-Aysha-portrait-photography-3.jpg",
+        "profile_desc": "Just a dummy account.",
+        "liked_movies": [],
+        "liked_series": [],
+        "following": []
+      }
+
+    },
+
+    {
+      "id": 2,
+      "private":
+      {
+        "token": "FJSH642HHJ",
+        "email": "rose@gmail.com",
+        "password": "roseZaBest!!"
+
+      },
+
+      "public":
+      {
+
+        "name": "Roselin Rose",
+        "profile_pic": "https://images.unsplash.com/photo-1557296387-5358ad7997bb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80",
+        "profile_desc": "Hi! ;o",
+        "liked_movies": [1001, 1002, 1003],
+        "liked_series": [2001, 2002, 2003],
+        "following": []
+      }
+
+    },
+
+
+    {
+      "id": 3,
+
+      "private":
+      {
+        "token": "JJJS521USZ",
+        "email": "poppy123@gmail.com",
+        "password": "livelaughlove"
+
+      },
+
+      "public":
+      {
+
+        "name": "Poppy Pop",
+        "profile_pic": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg",
+        "profile_desc": "Mother, wife, business woman.",
+        "liked_movies":
+        [
+          {
+
+          }
+        ],
+        "liked_series": [],
+        "following": []
+      }
+
+    }
+
+
+
+  ],
+  "movies":
+  [
+    {
+      "id": 1001,
+      "name": "Clockwork Orange",
+      "genres": ["Crime", "Drama", "Sci-Fi"],
+      "director": "Stanley Kubrick"
+    },
+
+    {
+      "id": 1002,
+      "name": "Pulp Fiction",
+      "genres": ["Crime", "Drama"],
+      "director": "Quentin Tarantino"
+    },
+
+    {
+      "id": 1003,
+      "name": "Fight Club",
+      "genres": ["Drama"],
+      "director": "David Fincher"
+    },
+
+    {
+      "id": 1004,
+      "name": "Spirited Away",
+      "genres": ["Animation", "Adventure", "Family"],
+      "director": "Hayao Miyazaki"
+    }
+
+
+  ],
+
+  "series":
+  [
+    {
+      "id": 2001,
+      "name": "Mr. Robot",
+      "genres": ["Crime", "Drama", "Thriller"],
+      "director": "Sam Esmail"
+    }
+  ]
+}
