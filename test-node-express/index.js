@@ -1,15 +1,53 @@
 // import db from "./db.json"
 const express = require('express');
-var db = require("./db.json")
 const path = require("path")
 const app = express();
+const sharp = require("sharp");
+var db = require("./db.json");
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    return res.send(db);
-});
 
 
+
+
+
+app.get('/test', (req, res) => {
+
+    console.log('aici imagine', req.query);
+
+    let image = sharp('example.jpg')
+
+    function addModifiers(item) {
+        switch (item) {
+            case "grayscale":
+                image.grayscale();
+                break;
+            case "resize":
+                image.resize(200);
+                break;
+        }
+    }
+
+    let modifiers = req.query.modifier.split(" ");
+
+    modifiers.forEach( child => {
+        addModifiers(child)
+    });
+
+    //modifier.forEach(item => addModifiers(item));
+
+
+
+
+    // .resize(200)
+    image.toFile("ex2.png")
+         .then(info => res.sendFile(path.join(__dirname + '/ex2.png')));
+
+
+
+    //res.sendFile(path.join(__dirname + 'example.jpg'));
+
+})
 
 
 app.get('/search', (req, res) => {
@@ -20,15 +58,15 @@ app.get('/search', (req, res) => {
 
     let user_with_name = db.users.filter(user => user.public.name === name);
 
-    if( user_with_name.length !== 0 )
-    {
+    if (user_with_name.length !== 0) {
         console.log("User gasit si returnat.");
         res.send(user_with_name[0].public.email);
-    }
-    else
+    } else {
         res.status(404).send({error: "Nu s-a gasit user-ul cu numele dat."})
+    }
 
 })
+
 
 app.get('/:id/movies', (req, res) => {
     console.log('aici afisare filme user', req.query);
@@ -46,11 +84,12 @@ app.get('/:id/movies', (req, res) => {
         res.status(200).send({error: "Userul nu a adaugat niciun film."})
 })
 
+
 app.get('/hello/:id', (req, res) => {
-
     res.sendFile(path.join(__dirname + '/helloworld.html'));
-
 })
+
+
 app.get('/:id/series', (req, res) => {
     console.log('aici afisare filme user', req.query);
 
@@ -66,6 +105,8 @@ app.get('/:id/series', (req, res) => {
     else
         res.status(200).send({error: "Userul nu a adaugat niciun film."})
 })
+
+
 app.put('/update/:id', (req, res) => {
     console.log('aici update', req.body);
     let id = req.params.id;
@@ -77,6 +118,8 @@ app.put('/update/:id', (req, res) => {
     res.json(db.users[id]);
 
 })
+
+
 
 
 /*
@@ -117,6 +160,6 @@ app.delete('/', (req, res) => {
 });
 
 
-app.listen(8000, () =>
-    console.log(`Example app listening on port ${8000}!`),
+app.listen(8080, () =>
+    console.log(`Example app listening on port ${8080}!`),
 );
