@@ -1,4 +1,4 @@
-# Depodenz-Warehouse-Site
+# Depodenz Warehouse Site
 University project [2020-2021] made using Node.JS, Express, MySQL. I've used XAMPP &amp; phpMyAdmin to connect to the database.
 
 ## Database Structure
