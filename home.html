@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Denzo Depo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<style>
+    body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+    body {font-size:16px;}
+    .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+    .w3-half img:hover{opacity:1}
+
+</style>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <!-- View All of the Employees -->
+    <!--<form action="viewEmployees" method="POST" target="_blank"> -->
+    <script>
+        //Test Function
+        var rowCopy;
+
+        function faceceva() {
+            alert("da");
+            console.log("da.");
+        }
+        function removeEmployee(d) {
+            alert("Employee deleted from Database.");
+            document.getElementById("ang"+d.toString()).remove();
+            //TODO: Delete from DB - DONE
+            fetch(/deleteEmployee/ + d);
+
+        }
+        function removeWarehouse(d) {
+            alert("Warehouse deleted from Database.");
+            document.getElementById("mag"+d.toString()).remove();
+            //TODO: Delete from DB - DONE
+            fetch(/deleteWarehouse/ + d);
+
+        }
+
+        function editEmployee(row, id) {
+
+            fetch('/ourTeam/' + id).then(response => response.json())
+                .then(data => {
+                    //console.log(data);
+                    var rowParent = row.parentElement;
+                    rowCopy = rowParent.innerHTML;
+
+                    var dateB = new Date(data[0].dataNasterii.valueOf());
+                    dateB = moment(dateB).format('YYYY-MM-DD');
+                    var dateH = new Date(data[0].dataAngajarii.valueOf());
+                    dateH = moment(dateH).format('YYYY-MM-DD');
+
+                    rowParent.innerHTML =
+                        `<form action="/updateEmployee/${id}" method="POST" target="_blank" id="updateForm${id}" >\
+                                                        <div class="w3-section">\
+                                                            <label>Name</label>
+                                                            <input class="w3-input w3-border" type="text" name="Name" value="${data[0].nume}" form="updateForm${id}" required >
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Surname</label>
+                                                            <input class="w3-input w3-border" type="text" name="Surname" value="${data[0].prenume}" form="updateForm${id}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>CNP</label>
+                                                            <input class="w3-input w3-border" type="text" name="CNP" value="${data[0].cnp}" form="updateForm${id}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Date of Birth</label>
+                                                            <input class="w3-input w3-border" type="date" name="Birthdate"
+                                                                   value="${dateB}" form="updateForm${id}"
+                                                                   min="1940-01-01" max="2010-12-31" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Date of Hire</label>
+                                                            <input class="w3-input w3-border" type="date"  name="Hiredate"
+                                                                   value="${dateH}" form="updateForm${id}"
+                                                                   min="1980-01-01" max="2021-12-31" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Position</label>
+                                                            <input class="w3-input w3-border" type="text" name="Position" form="updateForm${id}" value="${data[0].tipAngajat}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Working at</label>
+                                                            <input class="w3-input w3-border" type="text" name="ShopName" form="updateForm${id}" value="${data[0].numeMag}">
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <button class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom" onclick="fetchTeam()">Return</button>
+                                                            <button type="submit" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom" form="updateForm${id}" >Update Employee</button>
+                                                        </div>
+
+                                                </form>`;
+
+
+                    /*
+                    var H1 = document.createElement("th");
+                    var form = document.createElement("form");
+
+                    form.setAttribute("action", "/updateEmployee/"+id);
+                    form.setAttribute("method", "POST");
+                    form.setAttribute("target", "_blank");
+
+
+                    //var L1 = document.createElement("label");
+                    //L1.setAttribute("value", "Name");
+
+                    var inp1 = document.createElement("input");
+                    inp1.setAttribute("type", "text");
+                    inp1.setAttribute("name", "Name");
+                    inp1.setAttribute("value", data[0].nume);
+                    inp1.setAttribute("class", "w3-input w3-border");
+
+                    var inp2 = document.createElement("input");
+                    inp2.setAttribute("type", "text");
+                    inp2.setAttribute("name", "Surname");
+                    inp2.setAttribute("value", data[0].prenume);
+
+                    //form.appendChild(L1);
+                    form.appendChild(inp1);
+                    H1.appendChild(inp1);
+
+                    form.appendChild(inp2);
+
+                    const parent = row.parentElement;
+                    parent.innerHTML = ``;
+                    parent.appendChild(H);
+                    console.log(parent); */
+
+                });
+
+        }
+        function editWH(row, id) {
+
+            fetch('/ourWarehouses/' + id).then(response => response.json())
+                .then(data => {
+
+                    var rowParent = row.parentElement;
+                    rowCopy = rowParent.innerHTML;
+
+
+
+                    rowParent.innerHTML =
+                        `<form action="/updateWarehouse/${id}" method="POST" target="_blank" id="updateFormWH${id}" >\
+                                                        <div class="w3-section">\
+                                                            <label>Name</label>
+                                                            <input class="w3-input w3-border" type="text" name="Name" value="${data[0].nume}" form="updateFormWH${id}" required >
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Descriptive Name</label>
+                                                            <input class="w3-input w3-border" type="text" name="DescName" value="${data[0].sub_nume}" form="updateFormWH${id}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Address</label>
+                                                            <input class="w3-input w3-border" type="text" name="Address" value="${data[0].adresa}" form="updateFormWH${id}" required>
+                                                        </div>
+
+                                                        <div class="w3-section">\
+                                                            <label>ZIP</label>
+                                                            <input class="w3-input w3-border" type="text" name="ZIP" form="updateFormWH${id}" value="${data[0].zip}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Latitude</label>
+                                                            <input class="w3-input w3-border" type="text" name="Latitude" form="updateFormWH${id}" value="${data[0].latitudine}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Longitude</label>
+                                                            <input class="w3-input w3-border" type="text" name="Longitude" form="updateFormWH${id}" value="${data[0].longitudine}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Opening Time</label>
+                                                            <input class="w3-input w3-border" type="time" name="OpenTime" form="updateFormWH${id}" value="${data[0].ora_deschidere}" required>
+                                                        </div>
+                                                        <div class="w3-section">\
+                                                            <label>Closing Time</label>
+                                                            <input class="w3-input w3-border" type="time" name="CloseTime" form="updateFormWH${id}" value="${data[0].ora_inchidere}" required>
+                                                        </div>
+
+                                                        <div class="w3-section">\
+                                                            <button class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom" onclick="fetchWH()">Return</button>
+                                                            <button type="submit" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom" form="updateFormWH${id}">Update Warehouse</button>
+                                                        </div>
+                                                </form>`;
+                });
+
+        }
+
+        //Adauga/afiseaza toti angajatii + optiuni de stergere
+        function fetchTeam() {
+            document.getElementById("teamTable").innerHTML = `<tr>
+                                                                    <th style="width:250px">Name</th>
+                                                                    <th style="width:250px">Surname</th>
+                                                                    <th style="width:250px">Position</th>
+                                                                    <th style="width:250px">Hire Date</th>
+                                                                    <th style="width:250px">Birth Date</th>
+                                                                    <th style="width:200px">Warehouse</th>
+                                                                </tr>`;
+            fetch('/ourTeam').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        let idAng = "ang" + entry.id.toString();
+                        divObj.setAttribute("id", idAng);
+                        divObj.setAttribute("class", "w3-section");
+                        console.log("ang" + entry.id.toString());
+
+                        var shopName = entry.numeMag? entry.numeMag : '-';
+                        //2 = Timezone
+
+                        var dateB = new Date(entry.dataNasterii.valueOf());
+                        dateB = moment(dateB).format('YYYY-MM-DD');
+                        var dateH = new Date(entry.dataAngajarii.valueOf());
+                        dateH = moment(dateH).format('YYYY-MM-DD');
+
+                        divObj.innerHTML = `              <th>${entry.nume}</th>
+                                                          <th>${entry.prenume}</th>
+                                                          <th>${entry.tipAngajat}</th>
+                                                          <th>${dateH}</th>
+                                                          <th>${dateB}</th>
+                                                          <th>${shopName}</th>
+                                                          <button onclick="editEmployee(this, \''+${entry.id}+'\')"
+                                                                     type="submit"
+                                                                     class="w3-button w3-block w3-red ">edit</button>
+
+                                                          <button href="/deleteEmployee/${entry.id}" onclick="removeEmployee(\''+${entry.id}+'\')"
+                                                                     type="submit"
+                                                                     class="w3-button w3-block w3-red ">x</button>
+                                                          `;
+
+                        document.getElementById("teamTable").appendChild(divObj);
+
+                    })
+                });
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:100px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("teamTable").appendChild(div);
+        }
+
+        function fetchWH() {
+            document.getElementById("warehouseTable").innerHTML = `<tr>
+                                                                    <th style="width:250px">Name</th>
+                                                                    <th style="width:200px">Descriptive Name</th>
+                                                                    <th style="width:250px">Address</th>
+                                                                    <th style="width:100px">ZIP</th>
+                                                                    <th style="width:150px">Latitude</th>
+                                                                    <th style="width:150px">Longitude</th>
+                                                                    <th style="width:150px">Opening Time</th>
+                                                                    <th style="width:150px">Closing Time</th>
+                                                                </tr>`;
+            fetch('/ourWarehouses').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        let idMag = "mag" + entry.id.toString();
+                        divObj.setAttribute("id", idMag);
+                        divObj.setAttribute("class", "w3-section");
+                        console.log("mag" + entry.id.toString());
+
+                        divObj.innerHTML = `
+                                                          <th>${entry.nume}</th>
+                                                          <th>${entry.sub_nume}</th>
+                                                          <th>${entry.adresa}</th>
+                                                          <th>${entry.zip}</th>
+                                                          <th>${entry.latitudine}</th>
+                                                          <th>${entry.longitudine}</th>
+                                                          <th>${entry.ora_deschidere.slice(0,5)}</th>
+                                                          <th>${entry.ora_inchidere.slice(0,5)}</th>
+
+                                                          <button onclick="editWH(this, \''+${entry.id}+'\')"
+                                                                     type="submit"
+                                                                     class="w3-button w3-block  w3-red ">edit</button>
+
+                                                          <button href="/deleteEmployee/${entry.id}" onclick="removeWarehouse(\''+${entry.id}+'\')"
+                                                                     type="submit"
+                                                                     class="w3-button w3-block  w3-red ">x</button>
+
+                                                            `;
+
+                        document.getElementById("warehouseTable").appendChild(divObj);
+
+                    })
+                });
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:100px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:150px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:150px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:150px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:150px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:100px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("warehouseTable").appendChild(div);
+            }
+        function fetchDZ() {
+            document.getElementById("DZTable").innerHTML = `<tr>
+                                                                   <th style="width:250px">City</th>
+                                                                   <th style="width:200px">District</th>
+                                                                   <th style="width:100px">ZIP</th>
+                                                              </tr>`;
+            fetch('/ourDistZones').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        let idMag = "dz" + entry.id.toString();
+                        divObj.setAttribute("id", idMag);
+                        divObj.setAttribute("class", "w3-section");
+                        console.log("dz" + entry.id.toString());
+
+                        divObj.innerHTML = `<th>${entry.oras}</th>
+                                            <th>${entry.subregiune}</th>
+                                            <th>${entry.id}</th>`;
+
+                        document.getElementById("DZTable").appendChild(divObj);
+
+                    })
+                });
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:100px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("DZTable").appendChild(div);
+        }
+
+        function fetchProducers() {
+            document.getElementById("ProducersTable").innerHTML = `<tr>
+                                                                   <th style="width:250px">Name</th>
+                                                                   <th style="width:200px">Category</th>
+                                                                   <th style="width:200px">Phone</th>
+                                                                   <th style="width:200px">Email</th>
+                                                              </tr>`;
+            fetch('/ourProducers').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        let idMag = "producer" + entry.id.toString();
+                        divObj.setAttribute("id", idMag);
+                        divObj.setAttribute("class", "w3-section");
+                        console.log("producer" + entry.id.toString());
+
+                        divObj.innerHTML = `<th>${entry.nume}</th>
+                                            <th>${entry.categorie}</th>
+                                            <th>${entry.telefon}</th>
+                                            <th>${entry.email}</th>`;
+
+                        document.getElementById("ProducersTable").appendChild(divObj);
+
+                    })
+                });
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("ProducersTable").appendChild(div);
+        }
+
+        function fetchProducts() {
+            document.getElementById("ProductsTable").innerHTML = `<tr>
+                                                                   <th style="width:250px">Name</th>
+                                                                   <th style="width:200px">Producer</th>
+                                                                   <th style="width:200px">Status</th>
+                                                                   <th style="width:200px">Import Date</th>
+                                                                   <th style="width:100px">Price</th>
+
+                                                              </tr>`;
+            fetch('/ourProducts').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        let idMag = "product" + entry.id.toString();
+                        divObj.setAttribute("id", idMag);
+                        divObj.setAttribute("class", "w3-section");
+                        console.log("product" + entry.id.toString());
+
+                        divObj.innerHTML = `<th>${entry.nume}</th>
+                                            <th>${entry.producator}</th>
+                                            <th>${entry.status}</th>
+                                            <th>${entry.dataImport.slice(0,10)}</th>
+                                            <th>${entry.pret}</th>`;
+
+                        document.getElementById("ProductsTable").appendChild(divObj);
+
+                    })
+                });
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("ProductsTable").appendChild(div);
+        }
+
+        function fetchStockInWH() {
+
+            document.getElementById("OldestEmployees").innerHTML = `<tr>
+                                                                   <th style="width:140px">Available Stock</th>
+                                                                   <th style="width:200px">Warehouse</th>
+
+
+                                                              </tr>`;
+            fetch('/StockInWH').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        divObj.innerHTML = `<th>${entry.Percent.toString().slice(0,5) + '%'}</th>
+                                            <th>${entry.Name}</th>`;
+
+                        document.getElementById("OldestEmployees").appendChild(divObj);
+
+                    })
+                });
+
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:140px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("OldestEmployees").appendChild(div);
+        }
+
+        function fetchTopProductsByWH() {
+
+            document.getElementById("OldestEmployees").innerHTML = `<tr>
+                                                                   <th style="width:250px">Warehouse</th>
+                                                                   <th style="width:200px">Product</th>
+                                                                   <th style="width:200px">Value</th>
+
+
+                                                              </tr>`;
+            fetch('/topProductsByWH').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        divObj.innerHTML = `<th>${entry.WHName}</th>
+                                            <th>${entry.Name}</th>
+                                            <th>${entry.Price}</th>`;
+
+                        document.getElementById("OldestEmployees").appendChild(divObj);
+
+                    })
+                });
+
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("OldestEmployees").appendChild(div);
+        }
+
+        function fetchTopProducersByCategory() {
+
+            category = document.getElementById("producersCategory").value;
+            console.log(category);
+            if(category != '' && category != 'All') {
+                document.getElementById("OldestEmployees").innerHTML = `<tr>
+                                                                   <th style="width:250px">Category</th>
+                                                                   <th style="width:200px">Producer</th>
+                                                                   <th style="width:200px">No. Products</th>
+
+
+                                                              </tr>`;
+                fetch('/topProducersByCategory/' + category).then(response => response.json())
+                    .then(data => {
+                        data.forEach(entry => {
+                            const divObj = document.createElement("tr");
+
+                            let idMag = "topProducers" + entry.id.toString();
+                            divObj.setAttribute("id", idMag);
+                            divObj.setAttribute("class", "w3-section");
+                            console.log("product" + entry.id.toString());
+
+                            divObj.innerHTML = `<th>${entry.Category}</th>
+                                            <th>${entry.Name}</th>
+                                            <th>${entry.NrProducts}</th>`;
+
+                            document.getElementById("OldestEmployees").appendChild(divObj);
+
+                        })
+                    });
+            }
+            else {
+                document.getElementById("OldestEmployees").innerHTML = `<tr>
+                                                                   <th style="width:250px">Category</th>
+                                                                   <th style="width:200px">Producer</th>
+                                                                   <th style="width:200px">No. Products</th>
+
+
+                                                              </tr>`;
+                fetch('/topProducers').then(response => response.json())
+                    .then(data => {
+                        data.forEach(entry => {
+                            const divObj = document.createElement("tr");
+
+                            let idMag = "topProducers" + entry.id.toString();
+                            divObj.setAttribute("id", idMag);
+                            divObj.setAttribute("class", "w3-section");
+                            console.log("product" + entry.id.toString());
+
+                            divObj.innerHTML = `<th>${entry.Category}</th>
+                                            <th>${entry.Name}</th>
+                                            <th>${entry.NrProducts}</th>`;
+
+                            document.getElementById("OldestEmployees").appendChild(divObj);
+
+                        })
+                    });
+            }
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("OldestEmployees").appendChild(div);
+        }
+
+        function fetchOldestEmp() {
+            document.getElementById("OldestEmployees").innerHTML = `<tr>
+                                                                   <th style="width:250px">Name</th>
+                                                                   <th style="width:200px">Surname</th>
+                                                                   <th style="width:200px">Hire Date</th>
+                                                                   <th style="width:200px">Warehouse</th>
+
+
+                                                              </tr>`;
+            fetch('/oldestEmp').then(response => response.json())
+                .then(data => {
+                    data.forEach(entry => {
+                        const divObj = document.createElement("tr");
+
+                        let idMag = "oldestEmp" + entry.id.toString();
+                        divObj.setAttribute("id", idMag);
+                        divObj.setAttribute("class", "w3-section");
+                        console.log("product" + entry.id.toString());
+
+                        divObj.innerHTML = `<th>${entry.Name}</th>
+                                            <th>${entry.Surname}</th>
+                                            <th>${entry.HireDate.slice(0,10)}</th>
+                                            <th>${entry.WHName}</th>`;
+
+                        document.getElementById("OldestEmployees").appendChild(divObj);
+
+                    })
+                });
+            const div = document.createElement("tr");
+            div.innerHTML = `<th><hr style="width:250px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>
+                                 <th><hr style="width:200px;border:4px solid red" class="w3-round"></th>`;
+            document.getElementById("OldestEmployees").appendChild(div);
+        }
+
+    </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="module">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+
+        function drawChart() {
+
+            var array = [['Warehouse', 'Employees']];
+
+            fetch("/empWH").then(response => response.json())
+                .then(dataF => {
+
+                    dataF.forEach(entry => {
+                        let NameWH = entry.Name ? entry.Name : "Others";
+                        let row = [NameWH, entry.Number];
+                        array.push(row);
+                    })
+
+                    var data = google.visualization.arrayToDataTable(array);
+
+                    var options = {
+                        //title: 'Types of products that we deliver',
+                        pieHole: 0.35,
+                        colors: ['#ff471a', '#ff0000', '#953f3f',
+                            '#ea7d7d', '#8b1f38']
+
+                    };
+
+                    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+                    chart.draw(data, options);
+                });
+
+            var array2 = [['Producer', 'Product']];
+
+            fetch("/ProducerProductGraph").then(response => response.json())
+                .then(dataF => {
+
+                    dataF.forEach(entry => {
+                        let NamePR = entry.Name ? entry.Name : "Others";
+                        let row = [NamePR, entry.NumberOfProducts];
+                        array2.push(row);
+                    })
+
+                    var data = google.visualization.arrayToDataTable(array2);
+
+                    var options = {
+                        //title: 'Types of products that we deliver',
+                        pieHole: 0.35,
+                        colors: ['#ff471a', '#ff0000', '#953f3f',
+                            '#ea7d7d', '#8b1f38']
+
+                    };
+
+                    var chart2 = new google.visualization.PieChart(document.getElementById('donutchart2'));
+                    chart2.draw(data, options);
+
+                });
+
+            var array3 = [['Warehouse', 'Number of Products']];
+            fetch("/WarehouseNoProductGraph").then(response => response.json())
+                .then(dataF => {
+
+                    dataF.forEach(entry => {
+                        let row = [entry.Name, entry.Quantity];
+                        array3.push(row);
+                    })
+
+                    var data = google.visualization.arrayToDataTable(array3);
+
+                    var options = {
+                        //title: 'Types of products that we deliver',
+                        pieHole: 0.35,
+                        colors: ['#ff471a', '#ff0000', '#953f3f',
+                            '#ea7d7d', '#8b1f38']
+
+                    };
+
+                    var chart3 = new google.visualization.PieChart(document.getElementById('donutchart3'));
+                    chart3.draw(data, options);
+
+                });
+
+            var array4 = [["Element", "Density", {role: "style"}]];
+            fetch("/WarehousesPerCity").then(response => response.json())
+                .then(dataF => {
+
+                    dataF.forEach(entry => {
+                        let row = [entry.City, entry.Number, '#f53b0d'];
+                        array4.push(row);
+                    })
+
+                    var data = google.visualization.arrayToDataTable(array4);
+
+                    var view = new google.visualization.DataView(data);
+                    view.setColumns([0, 1,
+                        {
+                            calc: "stringify",
+                            sourceColumn: 1,
+                            type: "string",
+                            role: "annotation"
+                        },
+                        2]);
+
+                    var options = {
+                        title: "Number of Warehouses per City",
+                        width: 600,
+                        height: 400,
+                        bar: {groupWidth: "50%"},
+                        legend: {position: "none"},
+                    };
+                    var chart4 = new google.visualization.ColumnChart(document.getElementById("columnchart1"));
+                    chart4.draw(view, options);
+                });
+        }
+    </script>
+</head>
+
+
+
+
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+    <div class="w3-container">
+        <h3 class="w3-padding-64"><b>Depodenz<br></b></h3>
+    </div>
+    <div class="w3-bar-block">
+        <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Home</a>
+        <a href="#stats" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Statistics</a>
+        <a href="#warehousesDistZones" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Distribution Zones</a>
+        <a href="#warehouses" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Warehouses</a>
+        <a href="#employees" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Employees</a>
+        <a href="#producers" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Producers</a>
+        <a href="#products" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Products</a>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+    <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
+    <span>Depodenz</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+    <!-- Header -->
+    <div class="w3-container" style="margin-top:80px" id="">
+        <h1 class="w3-jumbo"><b>Our Warehouses</b></h1>
+        <h1 class="w3-xxxlarge w3-text-red"><b>Home.</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    </div>
+
+    <!-- Photo grid (modal) -->
+    <div class="w3-row-padding">
+        <div class="w3-half">
+            <img src="/imgs/depo1.jpg" style="width:100%" onclick="onClick(this)" alt="Concrete meets modern">
+            <img src="/imgs/depo2.jpg" style="width:100%" onclick="onClick(this)" alt="Light, white and tight design">
+        </div>
+
+        <div class="w3-half">
+            <img src="/imgs/depo3.jpg" style="width:100%" onclick="onClick(this)" alt="Windows market">
+            <img src="/imgs/depo4.jpg" style="width:100%" onclick="onClick(this)" alt="Simple market">
+        </div>
+    </div>
+
+    <div class="w3-container" style="margin-top:80px" id="stats">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Statistics.</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    </div>
+
+    <!-- Modal for full size images on click-->
+    <div id="modal01" class="w3-modal w3-black" style="padding-top:0" onclick="this.style.display='none'">
+        <span class="w3-button w3-black w3-xxlarge w3-display-topright">×</span>
+        <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
+            <img id="img01" class="w3-image">
+            <p id="caption"></p>
+        </div>
+
+    </div>
+
+    <!-- Pie Chart -->
+    <table class="w3-container">
+        <tr>
+            <th style="width:500px">Employees in Warehouses</th>
+            <th style="width:500px">Products from Producers</th>
+            <th style="width:500px">Products in Warehouses</th>
+
+        </tr>
+        <tr>
+            <td>
+                <div id="donutchart" style="width: 500px; height: 500px;"></div>
+            </td>
+            <td>
+                <div id="donutchart2" style="width: 500px; height: 500px;"></div>
+            </td>
+            <td>
+                <div id="donutchart3" style="width: 500px; height: 500px;"></div>
+            </td>
+        </tr>
+    </table>
+
+
+    <table>
+        <tr>
+
+            <th>
+                <div class="w3-section">
+                    <label>Category</label>
+                    <select  id="producersCategory" class="w3-input w3-border"  name="Category" size="1">
+                        <option value="All">All</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Beverage">Beverage</option>
+                        <option value="Beauty">Beauty</option>
+                        <option value="Textile">Textile</option>
+                        <option value="Housekeeping">Housekeeping</option>
+                        <option value="Nourishment">Nourishment</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                </div>
+            </th>
+            <td>
+
+            </td>
+        </tr>
+
+    </table>
+    <table>
+        <tr>
+            <td>
+                <button type="submit" onclick="fetchOldestEmp(this)" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Oldest Employees by Warehouse</button>
+            </td>
+            <td>
+                <button type="submit" onclick="fetchTopProducersByCategory(this)" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Top Producers by Category</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" onclick="fetchTopProductsByWH(this)" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Priciest Products by Warehouse</button>
+            </td>
+            <td>
+                <button type="submit" onclick="fetchStockInWH(this)" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Stock In Warehouses</button>
+            </td>
+
+        </tr>
+    </table>
+
+    <table id="OldestEmployees">
+    </table>
+
+    <!-- Warehouse -->
+    <div class="w3-container" id="warehousesDistZones" style="margin-top:75px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Distribution Zones.</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+
+        <p>We are lorem ipsum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <div id="columnchart1" ></div>
+
+
+        <form action="addDistributionZone" method="POST" target="_blank">
+            <table>
+                <tr>
+                    <th>
+                        <div class="w3-section">
+                            <label>City</label>
+                            <input class="w3-input w3-border" type="text" name="City" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="w3-section">
+                            <label>District</label>
+                            <input class="w3-input w3-border" type="text" name="District" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="w3-section">
+                            <label>District ZIP</label>
+                            <input class="w3-input w3-border" type="text" name="ZIP" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div style="color:white">
+                            <label color="white">-</label>
+                        <button type="submit" class="w3-button w3-block  w3-red ">Add New District</button>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+        </form>
+
+        <button type="submit" onclick="fetchDZ(this)" style="width:835px" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Current Distribution Zones</button>
+        <table id="DZTable">
+        </table>
+
+    </div>
+
+    <div class="w3-container" id="warehouses" style="margin-top:75px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Warehouses.</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+        <p>We are a market service that focuses on what's best for your home and what's best for you!</p>
+        <p>Some text about our services - what we do and what we offer. We are lorem ipsum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+        <!-- Fetch all warehouses -->
+
+        <button type="submit" onclick="fetchWH(this)" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Our Warehouses</button>
+
+        <table id="warehouseTable" class="w3-block">
+            <!--
+            <tr>
+                <th style="width:250px">Name</th>
+                <th style="width:200px">Descriptive Name</th>
+                <th style="width:250px">Address</th>
+                <th style="width:100px">ZIP</th>
+                <th style="width:200px">Latitude</th>
+                <th style="width:200px">Longitude</th>
+                <th style="width:150px">Opening Time</th>
+                <th style="width:150px">Closing Time</th>
+            </tr>
+            -->
+        </table>
+        <hr style="width:1600px;border:4px solid red" class="w3-round">
+
+        <form action="addWarehouse" method="POST" target="_blank">
+            <table>
+                <tr>
+                    <th>
+                        <div class="w3-section">
+                            <label>Name</label>
+                            <input class="w3-input w3-border" type="text" name="WarehouseName" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="w3-section">
+                            <label>Descriptive Name</label>
+                            <input class="w3-input w3-border" type="text" name="DescName" required>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    <div class="w3-section">
+                        <label>Address</label>
+                        <input class="w3-input w3-border" type="text" name="Address" required>
+                    </div>
+                    </th>
+                    <th>
+                    <div class="w3-section">
+                        <label>ZIP</label>
+                        <input class="w3-input w3-border" type="text" name="ZIP" required>
+                    </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    <div class="w3-section">
+                        <label>Latitude</label>
+                        <input class="w3-input w3-border" type="text" name="Latitude" required>
+                    </div>
+                    </th>
+                    <th>
+                    <div class="w3-section">
+                        <label>Longitude</label>
+                        <input class="w3-input w3-border" type="text" name="Longitude" required>
+                    </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    <div class="w3-section">
+                        <label>Opening Time</label>
+                        <input class="w3-input w3-border" type="time" name="OpeningTime"
+                               value="08:00" required>
+                        <!-- <input class="w3-input w3-border" type="text" name="Message" required> -->
+                    </div>
+                    </th>
+                    <th>
+                    <div class="w3-section">
+                        <label>Closing Time</label>
+                        <input class="w3-input w3-border" type="time"  name="ClosingTime"
+                               value="20:00" required>
+                    </div>
+                    </th>
+                </tr>
+            </table>
+            <tr>
+                <th>
+                <button style="width:448px" type="submit" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Add New Warehouse</button>
+                </th>
+            </tr>
+        </form>
+
+    </div>
+
+
+
+    <div class="w3-container" id="employees" style="margin-top:75px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Employees.</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+
+
+        <!-- The Team Photos -->
+        <div class="w3-row-padding w3-grayscale">
+            <div class="w3-col m4 w3-margin-bottom">
+                <div class="w3-light-grey">
+                    <img src="/imgs/team1.jpg" alt="Denis" style="width:100%">
+                    <div class="w3-container">
+                        <h3>Denis-Ștefan Pînzariu</h3>
+                        <p class="w3-opacity">CEO & Founder</p>
+                        <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-col m4 w3-margin-bottom">
+                <div class="w3-light-grey">
+                    <img src="/imgs/team2.jpg" alt="Denis" style="width:100%">
+                    <div class="w3-container">
+                        <h3>Mojo Jojo</h3>
+                        <p class="w3-opacity">CTO</p>
+                        <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-col m4 w3-margin-bottom">
+                <div class="w3-light-grey">
+                    <img src="/imgs/team3.jpg" alt="Denis" style="width:100%">
+                    <div class="w3-container">
+                        <h3>Constantinescu Eduard</h3>
+                        <p class="w3-opacity">CFO</p>
+                        <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p>The best team in the world.</p>
+        <p>We are lorem ipsum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+
+
+        <button type="submit" onclick="fetchTeam(this)" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Our Team</button>
+
+        <table id="teamTable">
+            <!--
+            <tr>
+                <th style="width:250px">Name</th>
+                <th style="width:250px">Surname</th>
+                <th style="width:250px">Position</th>
+                <th style="width:250px">Hire Date</th>
+                <th style="width:250px">Birth Date</th>
+                <th style="width:250px">Warehouse</th>
+            </tr>
+            -->
+
+        </table>
+        <hr style="width:1620px;border:4px solid red" class="w3-round">
+
+        <p><b>Our employees are thoughtfully chosen</b>.</p>
+        <p>We love meeting new people, fill out the form with the new employee. :)</p>
+
+        <form action="addEmployee" method="POST" target="_blank">
+            <table>
+                <tr>
+                    <th>
+                        <div class="w3-section">
+                            <label>Name</label>
+                            <input class="w3-input w3-border" type="text" name="Name" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="w3-section">
+                            <label>Surname</label>
+                            <input class="w3-input w3-border" type="text" name="Surname" required>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                    <div class="w3-section">
+                        <label>CNP</label>
+                        <input class="w3-input w3-border" type="text" name="CNP" required>
+                    </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    <div class="w3-section">
+                        <label>Date of Birth</label>
+                        <input class="w3-input w3-border" type="date" name="Birthdate"
+                               value="2000-01-01"
+                               min="1940-01-01" max="2010-12-31" required>
+                        <!-- <input class="w3-input w3-border" type="text" name="Message" required> -->
+                    </div>
+                    </th>
+                    <th>
+                    <div class="w3-section">
+                        <label>Date of Hire</label>
+                        <input class="w3-input w3-border" type="date"  name="Hiredate"
+                               value="2000-01-01"
+                               min="1980-01-01" max="2021-12-31" required>
+                    </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    <div class="w3-section">
+                        <label>Type</label>
+                        <input class="w3-input w3-border" type="text" name="Type" required>
+                    </div>
+                    </th>
+                    <th>
+                    <div class="w3-section">
+                        <label>Warehouse Name</label>
+                        <input class="w3-input w3-border" type="text" name="WarehouseName" placeholder="Can be empty">
+                    </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                    <button type="submit" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Add New Employee</button>
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+
+
+    <!-- Packages / Pricing Tables -->
+    <div class="w3-container" id="producers" style="margin-top:75px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Producers.</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+        <p>Some text our prices. Lorem ipsum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure</p>
+
+        <form action="addProducer" method="POST" target="_blank">
+            <table>
+                <tr>
+                    <th>
+                    <div class="w3-section">
+                        <label>Name</label>
+                        <input class="w3-input w3-border" type="text" name="Name" required>
+                    </div>
+                    </th>
+                    <th>
+                    <div class="w3-section">
+                        <label>Phone Number</label>
+                        <input class="w3-input w3-border" type="text" name="Phone" required>
+                    </div>
+                    </th>
+                    <th>
+                    <div class="w3-section">
+                        <label>Email</label>
+                        <input class="w3-input w3-border" type="text" name="Email" required>
+                    </div>
+                    </th>
+
+                    <th>
+                    <div class="w3-section">
+                        <label>Category</label>
+                        <select class="w3-input w3-border"  name="Category" size="1" required>
+                            <option value="Bakery">Bakery</option>
+                            <option value="Beverage">Beverage</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="Textile">Textile</option>
+                            <option value="Housekeeping">Housekeeping</option>
+                            <option value="Nourishment">Nourishment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    </th>
+
+
+                    <th>
+
+                        <div style="color:white">
+                            <label color="white">-</label>
+                            <button type="submit" class="w3-button w3-block  w3-red ">Add New Producer</button>
+                        </div>
+                    </th>
+
+            </table>
+        </form>
+
+        <button type="submit" onclick="fetchProducers(this)" style="width:222px" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">View Producers</button>
+        <table id="ProducersTable" class=" w3-block w3-margin-bottom" style="width:950px">
+        </table>
+        <p class=" w3-text-red" style="margin-top:35px">
+            Here at Denzodep everything you buy has passed tough quality tests.
+            We divide these tests in two main categories, based on the product type:
+        </p>
+    </div>
+
+    <div class="w3-row-padding">
+        <div class="w3-half w3-margin-bottom">
+            <ul class="w3-ul w3-light-grey w3-center">
+                <li class="w3-dark-grey w3-xlarge w3-padding-32">Standard Product Care</li>
+                <li class="w3-padding-16">Products are stored in protected envoirements</li>
+                <li class="w3-padding-16">Regular Quality Check-ups</li>
+                <li class="w3-padding-16">Delivered with care</li>
+                <li class="w3-padding-16">
+                    <h2>No more product damage</h2>
+
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="w3-half">
+            <ul class="w3-ul w3-light-grey w3-center">
+                <li class="w3-red w3-xlarge w3-padding-32">Extra Product Care</li>
+                <li class="w3-padding-16">Each product is bubble wrapped</li>
+                <li class="w3-padding-16">Hourly Quality Check-ups</li>
+                <li class="w3-padding-16">Quality Assured</li>
+                <li class="w3-padding-16">
+                    <h2>Products look fresh</h2>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- Products -->
+    <div class="w3-container" id="products" style="margin-top:75px">
+        <h1 class="w3-xxxlarge w3-text-red"><b>Products.</b></h1>
+        <hr style="width:50px;border:5px solid red" class="w3-round">
+        <p>Fill in the details of a new product.</p>
+
+        <form action="addProduct" method="POST" target="_blank">
+            <table>
+                <tr>
+                    <th>
+                        <div class="w3-section">
+                            <label>Name</label>
+                            <input class="w3-input w3-border" type="text" name="Name" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="w3-section">
+                            <label>Producer</label>
+                            <input class="w3-input w3-border" type="text" name="Producer" required>
+                        </div>
+
+                    </th>
+
+                </tr>
+            <tr>
+
+                <th>
+                    <div class="w3-section">
+                        <label>Status</label>
+                        <select class="w3-input w3-border"  name="Status" size="1" required>
+                            <option value="InStock">In Stock</option>
+                            <option value="WaitStock">Waiting for stock</option>
+                            <option value="NotAvailable">Not Available</option>
+                        </select>
+                    </div>
+                </th>
+                <th>
+                    <div class="w3-section">
+                        <label>Price</label>
+                        <input class="w3-input w3-border" type="text" name="Price" required>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <div class="w3-section">
+                        <label>Date of Import</label>
+                        <input class="w3-input w3-border" type="date"  name="ImportDate"
+                               value="2021-01-01"
+                               min="2008-01-01" max="2021-12-31" required>
+                    </div>
+                </th>
+
+                <th>
+                    <div class="w3-section">
+                        <label>Link Logo</label>
+                        <input class="w3-input w3-border" type="text" name="LinkLogo" required>
+                    </div>
+                </th>
+            </tr>
+                <tr>
+                    <th colspan="2">
+                    <button type="submit" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Add New Product</button>
+                    </th>
+                </tr>
+            </table>
+        </form>
+
+        <p>New product in the warehouse? Add it right here.</p>
+        <form action="linkProductToWH" method="POST" target="_blank">
+            <table>
+                <tr>
+                    <th>
+                        <div class="w3-section">
+                            <label>Product</label>
+                            <input class="w3-input w3-border" type="text" name="Product" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="w3-section">
+                            <label>Producer</label>
+                            <input class="w3-input w3-border" type="text" name="Producer" required>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <div class="w3-section">
+                            <label>Warehouse</label>
+                            <input class="w3-input w3-border" type="text" name="Warehouse" required>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="w3-section">
+                            <label>Quantity</label>
+                            <input class="w3-input w3-border" type="text" name="Quantity" required>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                    <button type="submit" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Link Product To Warehouse</button>
+                    </th>
+                </tr>
+            </table>
+        </form>
+
+        <button type="submit" onclick="fetchProducts(this)" style="width:446px" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom">Current Products</button>
+        <table id="ProductsTable">
+        </table>
+    </div>
+
+    <!-- End page content -->
+</div>
+
+<!-- W3.CSS Container -->
+<div class="w3-light-grey w3-container w3-padding-32" style="margin-top:75px;padding-right:58px"><p class="w3-right"></p></div>
+
+<script>
+    // Script to open and close sidebar
+    function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+        document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+        document.getElementById("myOverlay").style.display = "none";
+    }
+
+    // Modal Image Gallery
+    function onClick(element) {
+        document.getElementById("img01").src = element.src;
+        document.getElementById("modal01").style.display = "block";
+        var captionText = document.getElementById("caption");
+        captionText.innerHTML = element.alt;
+    }
+</script>
+
+</body>
+</html>
